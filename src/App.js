@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Layout from "./components/Layout/Layout";
 
 function App() {
-  return (
-    <div>
-      <h1 className="text-6xl font-bold ">Hello world!</h1>
-    </div>
-  );
+  useEffect(() => {
+    // fetchData();
+  }, []);
+  // const fetchData = async () => {
+  //   const response = await fetch(
+  //     "https://stephen-king-api.onrender.com/api/books",
+  //     {
+  //       mode: "no-cors",
+  //     },
+  //   );
+  //   console.log(response);
+  // };
+  return <Layout></Layout>;
 }
 
 export default App;

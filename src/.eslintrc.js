@@ -28,6 +28,7 @@ module.exports = {
       "error",
       { vars: "all", args: "after-used", ignoreRestSiblings: false },
     ],
-    "prettier/prettier": ["error", {}, { usePrettierrc: true }],
+
+    "prettier/prettier": ["error", { endOfLine: "auto" }],
   },
 };

@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import Dropdown from "../Dropdown";
+import { bookSortOptions } from "../../constants/contants";
+import { sortByOption } from "../utils/sortByOptions";
 
 const BooksTable = ({ books }) => {
+  const [sortBy, setSortBy] = useState("");
+
+  const handleSortChange = (selectedOption) => {
+    setSortBy(selectedOption);
+    // Perform sorting based on selected option
+    sortByOption(sortBy);
+  };
+
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-col items-center">
+      <Dropdown options={bookSortOptions} onSelectChange={handleSortChange} />
       <table className="table-auto">
         <thead>
           <tr>

@@ -1,9 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Dropdown from "../Dropdown";
+import { villainSortOptions } from "../../constants/contants";
 
 const VillainsTable = ({ villains }) => {
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-col items-center">
+      <Dropdown options={villainSortOptions} />
       <table className="table-auto">
         <thead>
           <tr>

@@ -1,9 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Dropdown from "../Dropdown";
+import { shortSortOptions } from "../../constants/contants";
 
 const ShortsTable = ({ shorts }) => {
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-col items-center">
+      <Dropdown options={shortSortOptions} />
+
       <table className="table-auto">
         <thead>
           <tr>

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const TabItem = ({ tab, activeTab, onClick, children }) => {
   return (
     <button
-      className={`text-md w-32 px-4 py-2 focus:outline-none ${
+      className={`text-md  px-4 py-2 focus:outline-none ${
         activeTab === tab ? "bg-gray-600" : "bg-gray-800"
       }`}
       onClick={() => onClick(tab)}

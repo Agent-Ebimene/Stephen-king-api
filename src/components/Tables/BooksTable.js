@@ -1,52 +1,80 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+
 import Dropdown from "../Dropdown";
-import { bookSortOptions } from "../../constants/contants";
-import { sortByOption } from "../utils/sortByOptions";
+import { bookSortOptions, booksTableColumns } from "../../constants/contants";
+import TableHead from "../TableHead";
+import TableBody from "../TableBody";
+import Modal from "../Modal";
+import SearchInput from "../SearchInput";
 
-const BooksTable = ({ books }) => {
+const BooksTable = ({ currentBooks, onSortChange }) => {
   const [sortBy, setSortBy] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSortChange = (selectedOption) => {
-    setSortBy(selectedOption);
-    // Perform sorting based on selected option
-    sortByOption(sortBy);
+  // const handleSortChange = (e) => {
+  //   const selectedValue = e.target.value;
+  //   setSortBy(selectedValue);
+  //   sortByOption(currentBooks, selectedValue);
+  // };
+  const handleSortChange = (e) => {
+    const selectedValue = e.target.value;
+    setSortBy(selectedValue);
+    onSortChange(selectedValue); // Notify parent component about the sort change
+  };
+  const handleOpenModal = (item) => {
+    setSelectedItem(item);
+    console.log(item);
+    setIsModalOpen(true);
   };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    console.log(searchQuery);
+  };
+  const filteredBooks =
+    searchQuery && searchQuery.length >= 2
+      ? currentBooks.filter((book) => {
+          return book?.Title.toLowerCase().includes(searchQuery.toLowerCase());
+        })
+      : currentBooks;
+  console.log(filteredBooks);
   return (
     <div className="flex flex-col items-center">
-      <Dropdown options={bookSortOptions} onSelectChange={handleSortChange} />
+      <div className="flex items-center">
+        <SearchInput onChange={handleSearchChange} searchValue={searchQuery} />
+        <Dropdown
+          options={bookSortOptions}
+          onSelectChange={handleSortChange}
+          value={sortBy}
+        />
+      </div>
+
       <table className="table-auto">
-        <thead>
-          <tr>
-            <th className="px-4 py-2">Title</th>
-            <th className="px-4 py-2">Publisher</th>
-            <th className="px-4 py-2">ISBN</th>
-            <th className="px-4 py-2">Pages</th>
-            <th className="px-4 py-2">Date Created</th>
-            <th className="px-4 py-2">Year</th>
-          </tr>
-        </thead>
-        <tbody>
-          {books.map(
-            ({ id, Title, ISBN, Pages, created_at, Year, Publisher }) => (
-              <tr key={id}>
-                <td className="border px-4 py-2 text-center">{Title}</td>
-                <td className="border px-4 py-2 text-center">{Publisher}</td>
-                <td className="border px-4 py-2 text-center">{ISBN}</td>
-                <td className="border px-4 py-2 text-center">{Pages}</td>
-                <td className="border px-4 py-2 text-center">{created_at}</td>
-                <td className="border px-4 py-2 text-center">{Year}</td>
-              </tr>
-            ),
-          )}
-        </tbody>
+        <TableHead columns={booksTableColumns} />
+        <TableBody
+          data={currentBooks}
+          columns={booksTableColumns}
+          onRowClick={handleOpenModal}
+        />
       </table>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        item={selectedItem}
+      />
     </div>
   );
 };
 
 export default BooksTable;
 BooksTable.propTypes = {
-  books: PropTypes.array,
+  currentBooks: PropTypes.array.isRequired,
+  onSortChange: PropTypes.func.isRequired,
 };

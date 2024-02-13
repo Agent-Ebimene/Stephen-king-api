@@ -1,11 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
+
 import TabItem from "../Tabs/TabItem";
 import { Tab } from "../../constants/contants";
 import BooksTable from "../Tables/BooksTable";
 import ShortsTable from "../Tables/ShortsTable";
 import VillainsTable from "../Tables/VillainsTable";
 import LoadingSpinner from "../LoadingSpinner";
+// import { sortByOption } from "../../utils/sortByOptions";
 
 const Header = () => {
   const [activeTab, setActiveTab] = useState(Tab.BOOKS);
@@ -14,7 +16,6 @@ const Header = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState("");
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -22,25 +23,28 @@ const Header = () => {
   useEffect(() => {
     fetchData();
     console.log(data);
-  }, [activeTab, totalPages]);
+  }, [activeTab, totalPages, sortBy]);
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await fetch(`api/${activeTab}`);
       const result = await response.json();
+      // let sortedData = [...result.data];
+      // if (sortBy) {
+      //   sortedData = sortByOption(sortedData, sortBy);
+      // }
       setData(result.data);
       setCurrentPage(1);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error); // handle this in the UI
     }
   };
-
-  const handleSortChange = (selectedOption) => {
-    setSortBy(selectedOption);
-    // Perform sorting based on selected option
+  const handleSortChange = (selectedValue) => {
+    setSortBy(selectedValue);
   };
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -91,7 +95,12 @@ const Header = () => {
           <LoadingSpinner loading={loading} />
         ) : (
           <div className="container mx-auto mt-4">
-            {activeTab === Tab.BOOKS && <BooksTable books={currentItems} />}
+            {activeTab === Tab.BOOKS && (
+              <BooksTable
+                currentBooks={currentItems}
+                onSortChange={handleSortChange}
+              />
+            )}
             {activeTab === Tab.SHORTS && <ShortsTable shorts={currentItems} />}
             {activeTab === Tab.VILLAINS && (
               <VillainsTable villains={currentItems} />

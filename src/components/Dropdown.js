@@ -2,15 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Dropdown = ({ options, onSelectChange }) => {
-  const handleSortChange = (event) => {
-    onSelectChange(event.target.value);
-  };
   return (
     <div className="my-4">
       <label htmlFor="sortBy">Sort By:</label>
       <select
         id="sortBy"
-        onChange={handleSortChange}
+        // value={value}
+        onChange={onSelectChange}
         className="px-2 py-1 rounded border-gray-300 focus:outline-none focus:border-indigo-500"
       >
         <option value="">Select Option</option>
@@ -27,6 +25,7 @@ const Dropdown = ({ options, onSelectChange }) => {
 export default Dropdown;
 
 Dropdown.propTypes = {
-  options: PropTypes.array,
+  options: PropTypes.array.isRequired,
   onSelectChange: PropTypes.func,
+  value: PropTypes.string.isRequired,
 };

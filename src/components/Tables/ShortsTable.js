@@ -1,46 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Dropdown from "../Dropdown";
-import { shortSortOptions } from "../../constants/contants";
+import { shortSortOptions, shortsTableColumns } from "../../constants/contants";
+import TableHead from "../TableHead";
+import TableBody from "../TableBody";
+import Modal from "../Modal";
 
-const ShortsTable = ({ shorts }) => {
+const ShortsTable = ({ shorts, onSortChange }) => {
+  const [sortBy, setSortBy] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleSortChange = (e) => {
+    const selectedValue = e.target.value;
+    setSortBy(selectedValue);
+    onSortChange(selectedValue); // Notify parent component about the sort change
+  };
+  const handleOpenModal = (item) => {
+    setSelectedItem(item);
+    console.log(item);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
   return (
     <div className="flex flex-col items-center">
-      <Dropdown options={shortSortOptions} />
+      <Dropdown
+        options={shortSortOptions}
+        onSelectChange={handleSortChange}
+        value={sortBy}
+      />
 
       <table className="table-auto">
-        <thead>
-          <tr>
-            <th className="px-4 py-2">Title</th>
-            <th className="px-4 py-2">Type</th>
-            <th className="px-4 py-2">Originally Publshed In</th>
-            <th className="px-4 py-2">Year</th>
-            <th className="px-4 py-2">Date Created</th>
-            <th className="px-4 py-2">Year</th>
-          </tr>
-        </thead>
-        <tbody>
-          {shorts.map(
-            ({ id, title, originallyPublishedIn, type, year, created_at }) => (
-              <tr key={id}>
-                <td className="border px-4 py-2 text-center">{title}</td>
-                <td className="border px-4 py-2 text-center">
-                  {originallyPublishedIn}
-                </td>
-                <td className="border px-4 py-2 text-center">{type}</td>
-                <td className="border px-4 py-2 text-center">{year}</td>
-                <td className="border px-4 py-2 text-center">{created_at}</td>
-                <td className="border px-4 py-2 text-center">{year}</td>
-              </tr>
-            ),
-          )}
-        </tbody>
+        <TableHead columns={shortsTableColumns} />
+        <TableBody
+          data={shorts}
+          columns={shortsTableColumns}
+          onRowClick={handleOpenModal}
+        />
       </table>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        item={selectedItem}
+      />
     </div>
   );
 };
 
 export default ShortsTable;
 ShortsTable.propTypes = {
-  shorts: PropTypes.array,
+  shorts: PropTypes.array.isRequired,
+  onSortChange: PropTypes.func.isRequired,
 };

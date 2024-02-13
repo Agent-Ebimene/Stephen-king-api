@@ -1,47 +1,48 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Dropdown from "../Dropdown";
-import { villainSortOptions } from "../../constants/contants";
+import { useState } from "react";
+
+import TableHead from "../TableHead";
+import { villainsTableColumns } from "../../constants/contants";
+import TableBody from "../TableBody";
+import Modal from "../Modal";
+// import Dropdown from "../Dropdown";
+// import { villainSortOptions } from "../../constants/contants";
 
 const VillainsTable = ({ villains }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const handleOpenModal = (item) => {
+    setSelectedItem(item);
+    console.log(item);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
   return (
     <div className="flex flex-col items-center">
-      <Dropdown options={villainSortOptions} />
+      {/* <Dropdown options={villainSortOptions} /> */}
       <table className="table-auto">
-        <thead>
-          <tr>
-            <th className="px-4 py-2">Name</th>
-            <th className="px-4 py-2">Gender</th>
-            <th className="px-4 py-2">Status</th>
-            <th className="px-4 py-2">No of Featured Books</th>
-            <th className="px-4 py-2">No of Featured Shorts</th>
-            <th className="px-4 py-2">Date Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {villains.map(
-            ({ id, name, gender, shorts, status, notes, created_at }) => (
-              <tr key={id}>
-                <td className="border px-4 py-2 text-center">{name}</td>
-                <td className="border px-4 py-2 text-center">{gender}</td>
-                <td className="border px-4 py-2 text-center">{status}</td>
-                <td className="border px-4 py-2 text-center">
-                  {notes?.length}
-                </td>
-                <td className="border px-4 py-2 text-center">
-                  {shorts?.length}
-                </td>
-                <td className="border px-4 py-2 text-center">{created_at}</td>
-              </tr>
-            ),
-          )}
-        </tbody>
+        <TableHead columns={villainsTableColumns} />
+        <TableBody
+          data={villains}
+          columns={villainsTableColumns}
+          onRowClick={handleOpenModal}
+        />
       </table>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        item={selectedItem}
+      />
     </div>
   );
 };
 
 export default VillainsTable;
 VillainsTable.propTypes = {
-  villains: PropTypes.array,
+  villains: PropTypes.array.isRequired,
 };

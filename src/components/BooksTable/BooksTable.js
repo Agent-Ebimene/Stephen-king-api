@@ -8,8 +8,10 @@ import TableBody from "../TableBody/TableBody";
 import Modal from "../Modal/Modal";
 import SearchInput from "../SearchInput/SearchInput";
 import Button from "../Button/Button";
+import { paginate } from "../../utils/paginate";
+import { filter } from "../../utils/filter";
 
-const BooksTable = ({ currentBooks, onSortChange, sortOption }) => {
+const BooksTable = ({ books, onSortChange, sortOption }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,17 +28,8 @@ const BooksTable = ({ currentBooks, onSortChange, sortOption }) => {
       setCurrentPage(currentPage - 1);
     }
   };
-  const filteredBooks =
-    searchQuery && searchQuery.length >= 2
-      ? currentBooks.filter((book) => {
-          return book?.Title.toLowerCase().includes(searchQuery.toLowerCase());
-        })
-      : currentBooks;
-  const itemsPerPage = 10;
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredBooks.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(currentBooks.length / itemsPerPage);
+  const filteredBooks = filter(books, searchQuery, "Title");
+  const { currentItems, totalPages } = paginate(filteredBooks, currentPage);
 
   const handleOpenModal = (item) => {
     setSelectedItem(item);
@@ -97,7 +90,7 @@ const BooksTable = ({ currentBooks, onSortChange, sortOption }) => {
 
 export default BooksTable;
 BooksTable.propTypes = {
-  currentBooks: PropTypes.array.isRequired,
+  books: PropTypes.array.isRequired,
   onSortChange: PropTypes.func.isRequired,
   sortOption: PropTypes.string,
 };

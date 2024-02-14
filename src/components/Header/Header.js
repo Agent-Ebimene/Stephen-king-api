@@ -93,7 +93,7 @@ const Header = () => {
           <div className="container mx-auto mt-4">
             {activeTab === Tab.BOOKS && (
               <BooksTable
-                currentBooks={books}
+                books={books}
                 // onSortChange={handleSortChange}
                 // sortOption={sortBy}
               />

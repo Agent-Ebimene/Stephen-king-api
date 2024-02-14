@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { formatDateCreated } from "../utils/formatDateCreated";
+import { formatDateCreated } from "../../utils/formatDateCreated";
 
 const TableBody = ({ data, columns, onRowClick }) => {
   const renderCell = (row, column) => {

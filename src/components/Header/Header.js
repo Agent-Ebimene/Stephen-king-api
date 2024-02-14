@@ -3,63 +3,57 @@ import { useState, useEffect } from "react";
 
 import TabItem from "../Tabs/TabItem";
 import { Tab } from "../../constants/contants";
-import BooksTable from "../Tables/BooksTable";
-import ShortsTable from "../Tables/ShortsTable";
-import VillainsTable from "../Tables/VillainsTable";
-import LoadingSpinner from "../LoadingSpinner";
+import BooksTable from "../BooksTable/BooksTable";
+import ShortsTable from "../ShortsTable/ShortsTable";
+import VillainsTable from "../VillainsTable/VillainsTable";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 // import { sortByOption } from "../../utils/sortByOptions";
 
 const Header = () => {
   const [activeTab, setActiveTab] = useState(Tab.BOOKS);
-  const [data, setData] = useState([]);
-  const [itemsPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [sortBy, setSortBy] = useState("");
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-  useEffect(() => {
-    fetchData();
-    console.log(data);
-  }, [activeTab, totalPages, sortBy]);
+  const [error, setError] = useState(null);
+  const [books, setBooks] = useState([]);
+  const [shorts, setShorts] = useState([]);
+  const [villains, setVillains] = useState([]);
+  const [loading, setLoading] = useState(true);
+  // const [sortBy, setSortBy] = useState("");
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const itemsPerPage = 10;
+  const tabs = [
+    { label: "books", endpoint: "api/books", setData: setBooks },
+    { label: "shorts", endpoint: "api/shorts", setData: setShorts },
+    { label: "villains", endpoint: "api/villains", setData: setVillains },
+  ];
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`api/${activeTab}`);
-      const result = await response.json();
-      // let sortedData = [...result.data];
-      // if (sortBy) {
-      //   sortedData = sortByOption(sortedData, sortBy);
-      // }
-      setData(result.data);
-      setCurrentPage(1);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error); // handle this in the UI
-    }
-  };
-  const handleSortChange = (selectedValue) => {
-    setSortBy(selectedValue);
-  };
+  // const handleSortChange = (e) => {
+  //   let selectedValue = e.target.value;
+  //   setSortBy(selectedValue);
+  // };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  useEffect(() => {
+    const fetchData = async (tabLabel) => {
+      const { endpoint, setData } = tabs.find((tab) => tab.label === tabLabel);
+      try {
+        setLoading(true);
+        const response = await fetch(endpoint);
+        const result = await response.json();
+        setData(result.data);
+        // setCurrentPage(1);
+        setLoading(false);
+        setError(null);
+      } catch (error) {
+        setError("Error Fetching table data, check your network");
+        setLoading(false);
+      }
+    };
+    fetchData(activeTab);
+    console.log();
+  }, [activeTab]);
 
   return (
     <>
@@ -93,37 +87,27 @@ const Header = () => {
       <div>
         {loading ? (
           <LoadingSpinner loading={loading} />
+        ) : error ? (
+          <ErrorMessage message={error} />
         ) : (
           <div className="container mx-auto mt-4">
             {activeTab === Tab.BOOKS && (
               <BooksTable
-                currentBooks={currentItems}
-                onSortChange={handleSortChange}
+                currentBooks={books}
+                // onSortChange={handleSortChange}
+                // sortOption={sortBy}
               />
             )}
-            {activeTab === Tab.SHORTS && <ShortsTable shorts={currentItems} />}
-            {activeTab === Tab.VILLAINS && (
-              <VillainsTable villains={currentItems} />
+            {activeTab === Tab.SHORTS && (
+              <ShortsTable
+                shorts={shorts}
+                // onSortChange={handleSortChange}
+                // sortOption={sortBy}
+              />
             )}
-            <div className="flex justify-center my-4">
-              <button
-                onClick={handlePrevPage}
-                disabled={currentPage === 1}
-                className="bg-gray-600 text-white w-20 rounded h-8"
-              >
-                Previous
-              </button>
-              <span className="px-4">
-                {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-                className="bg-gray-600 text-white w-20 h-8 rounded"
-              >
-                Next
-              </button>
-            </div>
+            {activeTab === Tab.VILLAINS && (
+              <VillainsTable villains={villains} />
+            )}
           </div>
         )}
       </div>

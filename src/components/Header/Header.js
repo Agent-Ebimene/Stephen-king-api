@@ -17,19 +17,12 @@ const Header = () => {
   const [shorts, setShorts] = useState([]);
   const [villains, setVillains] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const [sortBy, setSortBy] = useState("");
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 10;
+
   const tabs = [
     { label: "books", endpoint: "api/books", setData: setBooks },
     { label: "shorts", endpoint: "api/shorts", setData: setShorts },
     { label: "villains", endpoint: "api/villains", setData: setVillains },
   ];
-
-  // const handleSortChange = (e) => {
-  //   let selectedValue = e.target.value;
-  //   setSortBy(selectedValue);
-  // };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -91,13 +84,7 @@ const Header = () => {
           <ErrorMessage message={error} />
         ) : (
           <div className="container mx-auto mt-4">
-            {activeTab === Tab.BOOKS && (
-              <BooksTable
-                books={books}
-                // onSortChange={handleSortChange}
-                // sortOption={sortBy}
-              />
-            )}
+            {activeTab === Tab.BOOKS && <BooksTable books={books} />}
             {activeTab === Tab.SHORTS && (
               <ShortsTable
                 shorts={shorts}

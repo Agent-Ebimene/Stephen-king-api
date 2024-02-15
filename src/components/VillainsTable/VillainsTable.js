@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useState } from "react";
 
 import TableHead from "../TableHead/TableHead";
 import { villainsTableColumns } from "../../constants/contants";
@@ -12,15 +11,32 @@ import { villainSortOptions } from "../../constants/contants";
 import Button from "../Button/Button";
 import { paginate } from "../../utils/paginate";
 import { filter } from "../../utils/filter";
+import { sortByOption } from "../../utils/sortByOptions";
+import { Tab } from "../../constants/contants";
 
-const VillainsTable = ({ villains, onSortChange, sortOption }) => {
+const VillainsTable = ({ villains }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("");
+  const [sortedVillains, setSortedVillains] = useState(villains);
 
-  const filteredVillains = filter(villains, searchQuery, "name");
+  useEffect(() => {
+    sortData(sortBy);
+  }, [sortBy]);
+  const sortData = (option) => {
+    const sortedVillains = sortByOption(filteredVillains, option, Tab.VILLAINS);
+    setSortedVillains(sortedVillains);
+  };
+
+  const filteredVillains = filter(sortedVillains, searchQuery, "name");
   const { currentItems, totalPages } = paginate(filteredVillains, currentPage);
+  const handleSortChange = (event) => {
+    let selectedValue = event.target.value;
+    setSortBy(selectedValue);
+    console.log("Yess", selectedValue);
+  };
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -54,8 +70,8 @@ const VillainsTable = ({ villains, onSortChange, sortOption }) => {
         <SearchInput onChange={handleSearchChange} searchValue={searchQuery} />
         <Dropdown
           options={villainSortOptions}
-          onSelectChange={onSortChange}
-          value={sortOption}
+          onSelectChange={handleSortChange}
+          value={sortBy}
         />
       </div>
       <table className="table-auto">
@@ -82,6 +98,7 @@ const VillainsTable = ({ villains, onSortChange, sortOption }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         item={selectedItem}
+        table="villains"
       />
     </div>
   );
@@ -90,6 +107,4 @@ const VillainsTable = ({ villains, onSortChange, sortOption }) => {
 export default VillainsTable;
 VillainsTable.propTypes = {
   villains: PropTypes.array.isRequired,
-  onSortChange: PropTypes.func,
-  sortOption: PropTypes.string,
 };

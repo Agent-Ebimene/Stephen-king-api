@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Dropdown from "../Dropdown/Dropdown";
@@ -10,12 +10,23 @@ import SearchInput from "../SearchInput/SearchInput";
 import Button from "../Button/Button";
 import { paginate } from "../../utils/paginate";
 import { filter } from "../../utils/filter";
+import { sortByOption } from "../../utils/sortByOptions";
+import { Tab } from "../../constants/contants";
 
-const BooksTable = ({ books, onSortChange, sortOption }) => {
+const BooksTable = ({ books }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("");
+  const [sortedBooks, setSortedBooks] = useState(books);
+
+  const handleSortChange = (event) => {
+    let selectedValue = event.target.value;
+    setSortBy(selectedValue);
+    setCurrentPage(1);
+    console.log("Yess", selectedValue);
+  };
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -28,16 +39,25 @@ const BooksTable = ({ books, onSortChange, sortOption }) => {
       setCurrentPage(currentPage - 1);
     }
   };
-  const filteredBooks = filter(books, searchQuery, "Title");
-  const { currentItems, totalPages } = paginate(filteredBooks, currentPage);
+  useEffect(() => {
+    sortData(sortBy);
+  }, [sortBy, sortedBooks]);
 
+  const filteredBooks = filter(sortedBooks, searchQuery, "Title");
+  const { currentItems, totalPages } = paginate(filteredBooks, currentPage);
+  const sortData = (option) => {
+    // const sortedBooks = [...filteredBooks].sort((a, b) => {
+    //   if (a[option] < b[option]) return -1;
+    //   if (a[option] > b[option]) return 1;
+    //   return 0;
+    // });
+    const sortedBooks = sortByOption(filteredBooks, option, Tab.BOOKS);
+    setSortedBooks(sortedBooks);
+  };
   const handleOpenModal = (item) => {
     setSelectedItem(item);
     console.log(item);
     setIsModalOpen(true);
-  };
-  const handleSortChange = (selectedValue) => {
-    onSortChange(selectedValue);
   };
 
   const handleCloseModal = () => {
@@ -46,6 +66,7 @@ const BooksTable = ({ books, onSortChange, sortOption }) => {
   };
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1);
   };
 
   return (
@@ -55,7 +76,7 @@ const BooksTable = ({ books, onSortChange, sortOption }) => {
         <Dropdown
           options={bookSortOptions}
           onSelectChange={handleSortChange}
-          value={sortOption}
+          value={sortBy}
         />
       </div>
 
@@ -83,6 +104,7 @@ const BooksTable = ({ books, onSortChange, sortOption }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         item={selectedItem}
+        table="books"
       />
     </div>
   );
@@ -91,6 +113,4 @@ const BooksTable = ({ books, onSortChange, sortOption }) => {
 export default BooksTable;
 BooksTable.propTypes = {
   books: PropTypes.array.isRequired,
-  onSortChange: PropTypes.func.isRequired,
-  sortOption: PropTypes.string,
 };

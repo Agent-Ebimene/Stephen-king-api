@@ -10,12 +10,12 @@ export const bookSortOptions = [
   { label: "Year", value: "Year" },
 ];
 
-export const shortSortOptions = [{ label: "Year", value: "Year" }];
+export const shortSortOptions = [{ label: "Year", value: "year" }];
 
 export const villainSortOptions = [
   { label: "No of Featured Books", value: "featured Books" },
-  { label: "Status", value: "Status" },
-  { label: "Date Created", value: "date created" },
+  { label: "Status", value: "status" },
+  { label: "Date Created", value: "Date Created" },
 ];
 
 export const shortsTableColumns = [

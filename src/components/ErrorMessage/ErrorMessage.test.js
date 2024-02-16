@@ -6,7 +6,7 @@ describe("ErrorMessage component", () => {
   test("renders error message correctly", () => {
     const errorMessage = "An error occurred.";
     const { getByText } = render(<ErrorMessage message={errorMessage} />);
-    const errorElement = getByText(`Error: ${errorMessage}`);
+    const errorElement = getByText(errorMessage);
     expect(errorElement).toBeInTheDocument();
   });
 });

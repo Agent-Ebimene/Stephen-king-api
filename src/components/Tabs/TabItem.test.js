@@ -10,7 +10,7 @@ describe("TabItem component", () => {
     const { getByText } = render(
       <TabItem tab={tab} activeTab={activeTab} onClick={onClick}>
         {tab}
-      </TabItem>
+      </TabItem>,
     );
 
     const buttonElement = getByText(tab);

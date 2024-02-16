@@ -108,7 +108,7 @@ const BooksTable = ({ books }) => {
             <Button
               disabled={currentPage === totalPages}
               onClick={handleNextPage}
-              className={"cursor-not-allowed opacity-50"}
+              // className={"cursor-not-allowed opacity-50"}
               currentPage={currentItems}
               totalPages={totalPages}
             >

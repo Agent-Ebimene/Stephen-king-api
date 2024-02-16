@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { formatDateCreated } from "../../utils/formatDateCreated";
+import Button from "../Button/Button";
 
 const Modal = ({ isOpen, item, onClose, table }) => {
   const renderContent = () => {
@@ -8,33 +9,107 @@ const Modal = ({ isOpen, item, onClose, table }) => {
       case "books":
         return (
           <>
-            <h2 className="text-xl sm:text-2xl  mb-2">Title: {item?.Title}</h2>
-            <p className="text-base sm:text-lg mb-4">Year: {item?.Year}</p>
-            <p className="text-base sm:text-lg mb-4">ISBN: {item?.ISBN}</p>
-            <p className="text-base sm:text-lg mb-4">Pages: {item?.Pages}</p>
             <p className="text-base sm:text-lg mb-4">
-              Publisher: {item?.Publisher}
+              Title:
+              <span className="text-purple-500">{item?.Title}</span>
             </p>
-
-            {/* Render additional book-specific properties */}
+            <p className="text-base sm:text-lg mb-4">
+              Year:
+              <span className="text-purple-500">Year: {item?.Year}</span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              ISBN:
+              <span className="text-purple-500">{item?.ISBN}</span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Pages:
+              <span className="text-purple-500">{item?.Pages}</span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Publisher:
+              <span className="text-purple-500">{item?.Publisher}</span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Handle:
+              <span className="text-purple-500">{item?.handle}</span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Date Created:
+              <span className="text-purple-500">
+                {formatDateCreated(item?.created_at)}
+              </span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Notes:
+              <span className="text-purple-500">
+                {item?.Notes.length === 0 ||
+                (item?.Notes.length === 1 && item?.Notes[0] === "")
+                  ? "No notes"
+                  : item?.Notes.join(", ")}
+              </span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Villains:
+              <span className="text-purple-500">
+                {item?.villains.map((villain) => villain.name).join(", ") ||
+                  "No villains"}
+              </span>
+            </p>
           </>
         );
       case "villains":
         return (
           <>
             {" "}
-            <h2 className="text-xl sm:text-2xl  mb-2">Title: {item?.name}</h2>
             <p className="text-base sm:text-lg mb-4">
-              No of Featured Books: {item?.books.length}
+              Name:
+              <span className="text-purple-500">{item?.name}</span>
             </p>
             <p className="text-base sm:text-lg mb-4">
-              {" "}
-              No of Featured Shorts: {item?.shorts.length}
+              Featured Books:
+              <span className="text-purple-500">
+                {item?.books.length === 0 ||
+                (item?.books.length === 1 && item?.books[0] === "")
+                  ? "No Books"
+                  : item?.books.map((book, index) => (
+                      <React.Fragment key={index}>
+                        {index > 0 && ", "}
+                        <span>{book.title}</span>
+                      </React.Fragment>
+                    ))}
+              </span>
             </p>
-            <p className="text-base sm:text-lg mb-4">Status: {item?.status}</p>
-            <p className="text-base sm:text-lg mb-4">Gender: {item?.gender}</p>
             <p className="text-base sm:text-lg mb-4">
-              Date Created: {formatDateCreated(item?.created_at)}
+              Featured Shorts:
+              <span className="text-purple-500">
+                {item?.shorts.length === 0 ||
+                (item?.shorts.length === 1 && item?.shorts[0] === "")
+                  ? "No Shorts"
+                  : item?.shorts.map((short) => short.title)}
+              </span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Status:
+              <span className="text-purple-500">{item?.status}</span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Gender:
+              <span className="text-purple-500">{item?.gender}</span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Notes:
+              <span className="text-purple-500">
+                {item?.notes.length === 0 ||
+                (item?.notes.length === 1 && item?.notes[0] === "")
+                  ? "No notes"
+                  : item?.notes.join(", ")}
+              </span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Date Created:
+              <span className="text-purple-500">
+                {formatDateCreated(item?.created_at)}
+              </span>
             </p>
           </>
         );
@@ -42,17 +117,53 @@ const Modal = ({ isOpen, item, onClose, table }) => {
         return (
           <>
             {" "}
-            <h2 className="text-xl sm:text-2xl  mb-2">Title: {item?.title}</h2>
-            <p className="text-base sm:text-lg mb-4">Year: {item?.year}</p>
             <p className="text-base sm:text-lg mb-4">
-              Date Created: {formatDateCreated(item?.created_at)}
+              Title:
+              <span className="text-purple-500">{item?.title}</span>
             </p>
             <p className="text-base sm:text-lg mb-4">
               {" "}
-              Originally Published: {item?.originallyPublishedIn}
+              Type:
+              <span className="text-purple-500">{item?.type} </span>
             </p>
-            <p className="text-base sm:text-lg mb-4">Type: {item?.type}</p>
-            {/* <p className="text-base sm:text-lg mb-4">Gender: {item?.gender}</p> */}
+            <p className="text-base sm:text-lg mb-4">
+              {" "}
+              Year:
+              <span className="text-purple-500">{item?.year}</span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              {" "}
+              Handle:
+              <span className="text-purple-500">{item?.handle}</span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Originally Published In:
+              <span className="text-purple-500">
+                {item?.originallyPublishedIn}
+              </span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Notes:
+              <span className="text-purple-500">
+                {item?.notes.length === 0 ||
+                (item?.notes.length === 1 && item?.notes[0] === "")
+                  ? "No notes"
+                  : item?.notes.join(", ")}
+              </span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Villains:
+              <span className="text-purple-500">
+                {item?.villains.map((villain) => villain.name).join(", ") ||
+                  "No villains"}
+              </span>
+            </p>
+            <p className="text-base sm:text-lg mb-4">
+              Date Created:
+              <span className="text-purple-500">
+                {formatDateCreated(item?.created_at)}
+              </span>
+            </p>
           </>
         );
       default:
@@ -69,14 +180,14 @@ const Modal = ({ isOpen, item, onClose, table }) => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
         <div className="z-20 bg-white rounded-lg p-4 mx-4 my-8 sm:max-w-3xl w-full h-screen">
-          {renderContent()}
-          <div className="flex justify-center mt-16">
-            <button
-              className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
+          <div className="">{renderContent()}</div>
+          <div className="flex justify-center ">
+            <Button
+              className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded h-10"
               onClick={onClose}
             >
               Close
-            </button>
+            </Button>
           </div>
         </div>
       </div>

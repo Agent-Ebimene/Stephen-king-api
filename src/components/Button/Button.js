@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Button = ({ children, onClick, disabled }) => {
+const Button = ({ children, onClick, disabled, className }) => {
   return (
     <button
       disabled={disabled}
       onClick={onClick}
-      className="bg-gray-600 text-white w-20 rounded h-8 "
+      className={`bg-gray-600 text-white w-20 rounded h-8 ${className}`}
     >
       {children}
     </button>
@@ -18,4 +18,5 @@ Button.propTypes = {
   onClick: PropTypes.func.isRequired,
   children: PropTypes.node,
   disabled: PropTypes.bool,
+  className: PropTypes.string,
 };

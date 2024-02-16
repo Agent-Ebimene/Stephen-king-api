@@ -35,6 +35,7 @@ const Header = () => {
         const response = await fetch(endpoint);
         const result = await response.json();
         setData(result.data);
+
         setLoading(false);
         setError(null);
       } catch (error) {

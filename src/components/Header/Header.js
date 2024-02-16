@@ -20,17 +20,17 @@ const Header = () => {
   const tabs = [
     {
       label: "books",
-      endpoint: "https://stephen-king-api.onrender.com/api/books",
+      endpoint: "/api/books",
       setData: setBooks,
     },
     {
       label: "shorts",
-      endpoint: "https://stephen-king-api.onrender.com/api/shorts",
+      endpoint: "/api/shorts",
       setData: setShorts,
     },
     {
       label: "villains",
-      endpoint: "https://stephen-king-api.onrender.com/api/villains",
+      endpoint: "/api/villains",
       setData: setVillains,
     },
   ];

@@ -53,7 +53,6 @@ const BooksTable = ({ books }) => {
   };
   const handleOpenModal = (item) => {
     setSelectedItem(item);
-    console.log(item);
     setIsModalOpen(true);
   };
 

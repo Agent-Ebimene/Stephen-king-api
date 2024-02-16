@@ -55,7 +55,6 @@ const VillainsTable = ({ villains }) => {
 
   const handleOpenModal = (item) => {
     setSelectedItem(item);
-    console.log(item);
     setIsModalOpen(true);
   };
 

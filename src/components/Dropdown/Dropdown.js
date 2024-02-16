@@ -11,7 +11,6 @@ const Dropdown = ({ options, onSelectChange, value }) => {
         onChange={onSelectChange}
         className="px-2 py-1 rounded border-gray-300 focus:outline-none focus:border-indigo-500"
       >
-        <option value="">Select Option</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

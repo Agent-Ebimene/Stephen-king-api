@@ -12,7 +12,7 @@ import { paginate } from "../../utils/paginate";
 import { filter } from "../../utils/filter";
 import { sortByOption } from "../../utils/sortByOptions";
 import { Tab } from "../../constants/contants";
-// import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const ShortsTable = ({ shorts }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,7 +21,6 @@ const ShortsTable = ({ shorts }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("");
   const [sortedShorts, setSortedShorts] = useState(shorts);
-  // const [sortError] = useState(false);
 
   const filteredShorts = filter(sortedShorts, searchQuery, "title");
   const { currentItems, totalPages } = paginate(filteredShorts, currentPage);
@@ -41,7 +40,6 @@ const ShortsTable = ({ shorts }) => {
   const handleSortChange = (event) => {
     let selectedValue = event.target.value;
     setSortBy(selectedValue);
-    console.log("Yess", selectedValue);
   };
 
   const handleOpenModal = (item) => {
@@ -55,17 +53,20 @@ const ShortsTable = ({ shorts }) => {
     setSelectedItem(null);
   };
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    const { value } = e.target;
+    setSearchQuery(value);
+    const filtered = value === "" ? shorts : filter(shorts, value, "title");
+    setSortedShorts(filtered);
+
     setCurrentPage(1);
   };
   useEffect(() => {
     sortData(sortBy);
-  }, [sortBy, sortedShorts]);
+  }, [sortBy]);
   const sortData = (option) => {
-    const sortedShorts = sortByOption(filteredShorts, option, Tab.SHORTS);
+    const sortedShorts =
+      option === "" ? shorts : sortByOption(filteredShorts, option, Tab.SHORTS);
     setSortedShorts(sortedShorts);
-
-    // setSortError(true);
   };
   return (
     <div className="flex flex-col items-center">
@@ -77,30 +78,36 @@ const ShortsTable = ({ shorts }) => {
           value={sortBy}
         />
       </div>
-      {/* {sortError ? (
-        <ErrorMessage message={"There is no such entry"} />
+
+      {filteredShorts.length === 0 ? (
+        <ErrorMessage message={"No such entry found!"} />
       ) : (
-        <> */}
-      <table className="table-auto">
-        <TableHead columns={shortsTableColumns} />
-        <TableBody
-          data={currentItems}
-          columns={shortsTableColumns}
-          onRowClick={handleOpenModal}
-        />
-      </table>
-      <div className="flex justify-center my-4">
-        <Button disabled={currentPage === 1} onClick={handlePrevPage}>
-          Prev{" "}
-        </Button>
-        <span className="px-4">
-          {" "}
-          {currentPage} of {totalPages}
-        </span>
-        <Button disabled={currentPage === totalPages} onClick={handleNextPage}>
-          Next
-        </Button>
-      </div>
+        <>
+          <table className="table-auto">
+            <TableHead columns={shortsTableColumns} />
+            <TableBody
+              data={currentItems}
+              columns={shortsTableColumns}
+              onRowClick={handleOpenModal}
+            />
+          </table>
+          <div className="flex justify-center my-4">
+            <Button disabled={currentPage === 1} onClick={handlePrevPage}>
+              Prev{" "}
+            </Button>
+            <span className="px-4">
+              {" "}
+              {currentPage} of {totalPages}
+            </span>
+            <Button
+              disabled={currentPage === totalPages}
+              onClick={handleNextPage}
+            >
+              Next
+            </Button>
+          </div>
+        </>
+      )}
 
       <Modal
         isOpen={isModalOpen}

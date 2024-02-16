@@ -35,7 +35,6 @@ const Header = () => {
         const response = await fetch(endpoint);
         const result = await response.json();
         setData(result.data);
-        // setCurrentPage(1);
         setLoading(false);
         setError(null);
       } catch (error) {
@@ -44,7 +43,6 @@ const Header = () => {
       }
     };
     fetchData(activeTab);
-    console.log();
   }, [activeTab]);
 
   return (

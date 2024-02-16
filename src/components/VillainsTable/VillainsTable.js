@@ -13,6 +13,7 @@ import { paginate } from "../../utils/paginate";
 import { filter } from "../../utils/filter";
 import { sortByOption } from "../../utils/sortByOptions";
 import { Tab } from "../../constants/contants";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const VillainsTable = ({ villains }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +27,10 @@ const VillainsTable = ({ villains }) => {
     sortData(sortBy);
   }, [sortBy]);
   const sortData = (option) => {
-    const sortedVillains = sortByOption(filteredVillains, option, Tab.VILLAINS);
+    const sortedVillains =
+      option === ""
+        ? villains
+        : sortByOption(filteredVillains, option, Tab.VILLAINS);
     setSortedVillains(sortedVillains);
   };
 
@@ -35,7 +39,6 @@ const VillainsTable = ({ villains }) => {
   const handleSortChange = (event) => {
     let selectedValue = event.target.value;
     setSortBy(selectedValue);
-    console.log("Yess", selectedValue);
   };
 
   const handleNextPage = () => {
@@ -61,7 +64,11 @@ const VillainsTable = ({ villains }) => {
     setSelectedItem(null);
   };
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    const { value } = e.target;
+    setSearchQuery(value);
+    const filtered = value === "" ? villains : filter(villains, value, "name");
+    setSortedVillains(filtered);
+
     setCurrentPage(1);
   };
 
@@ -75,26 +82,37 @@ const VillainsTable = ({ villains }) => {
           value={sortBy}
         />
       </div>
-      <table className="table-auto">
-        <TableHead columns={villainsTableColumns} />
-        <TableBody
-          data={currentItems}
-          columns={villainsTableColumns}
-          onRowClick={handleOpenModal}
-        />
-      </table>
-      <div className="flex justify-center my-4">
-        <Button disabled={currentPage === 1} onClick={handlePrevPage}>
-          Prev{" "}
-        </Button>
-        <span className="px-4">
-          {" "}
-          {currentPage} of {totalPages}
-        </span>
-        <Button disabled={currentPage === totalPages} onClick={handleNextPage}>
-          Next
-        </Button>
-      </div>
+
+      {sortedVillains.length === 0 ? (
+        <ErrorMessage message="No such entry found!" />
+      ) : (
+        <>
+          <table className="table-auto">
+            <TableHead columns={villainsTableColumns} />
+            <TableBody
+              data={currentItems}
+              columns={villainsTableColumns}
+              onRowClick={handleOpenModal}
+            />
+          </table>
+          <div className="flex justify-center my-4">
+            <Button disabled={currentPage === 1} onClick={handlePrevPage}>
+              Prev{" "}
+            </Button>
+            <span className="px-4">
+              {" "}
+              {currentPage} of {totalPages}
+            </span>
+            <Button
+              disabled={currentPage === totalPages}
+              onClick={handleNextPage}
+            >
+              Next
+            </Button>
+          </div>
+        </>
+      )}
+
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}

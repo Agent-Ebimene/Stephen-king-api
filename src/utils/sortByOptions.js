@@ -1,7 +1,4 @@
 export function sortByOption(data, option, table) {
-  // if (!option || option === "select an option") {
-  //   return data;
-  // }
   switch (table) {
     case "books":
       switch (option) {

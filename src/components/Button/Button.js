@@ -6,7 +6,7 @@ const Button = ({ children, onClick, disabled }) => {
     <button
       disabled={disabled}
       onClick={onClick}
-      className="bg-gray-600 text-white w-20 rounded h-8"
+      className="bg-gray-600 text-white w-20 rounded h-8 "
     >
       {children}
     </button>

@@ -62,6 +62,7 @@ const VillainsTable = ({ villains }) => {
   };
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1);
   };
 
   return (

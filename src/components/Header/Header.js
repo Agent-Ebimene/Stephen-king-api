@@ -8,7 +8,6 @@ import ShortsTable from "../ShortsTable/ShortsTable";
 import VillainsTable from "../VillainsTable/VillainsTable";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-// import { sortByOption } from "../../utils/sortByOptions";
 
 const Header = () => {
   const [activeTab, setActiveTab] = useState(Tab.BOOKS);
@@ -85,13 +84,7 @@ const Header = () => {
         ) : (
           <div className="container mx-auto mt-4">
             {activeTab === Tab.BOOKS && <BooksTable books={books} />}
-            {activeTab === Tab.SHORTS && (
-              <ShortsTable
-                shorts={shorts}
-                // onSortChange={handleSortChange}
-                // sortOption={sortBy}
-              />
-            )}
+            {activeTab === Tab.SHORTS && <ShortsTable shorts={shorts} />}
             {activeTab === Tab.VILLAINS && (
               <VillainsTable villains={villains} />
             )}

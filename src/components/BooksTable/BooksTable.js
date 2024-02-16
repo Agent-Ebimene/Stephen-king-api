@@ -89,14 +89,24 @@ const BooksTable = ({ books }) => {
         />
       </table>
       <div className="flex justify-center my-4">
-        <Button disabled={currentPage === 1} onClick={handlePrevPage}>
+        <Button
+          disabled={currentPage === 1}
+          onClick={handlePrevPage}
+          currentPage={currentPage}
+        >
           Prev{" "}
         </Button>
         <span className="px-4">
           {" "}
           {currentPage} of {totalPages}
         </span>
-        <Button disabled={currentPage === totalPages} onClick={handleNextPage}>
+        <Button
+          disabled={currentPage === totalPages}
+          onClick={handleNextPage}
+          className={"cursor-not-allowed opacity-50"}
+          currentPage={currentItems}
+          totalPages={totalPages}
+        >
           Next
         </Button>
       </div>

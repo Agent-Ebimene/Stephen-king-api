@@ -83,14 +83,16 @@ const ShortsTable = ({ shorts }) => {
         <ErrorMessage message={"No such entry found!"} />
       ) : (
         <>
-          <table className="table-auto">
-            <TableHead columns={shortsTableColumns} />
-            <TableBody
-              data={currentItems}
-              columns={shortsTableColumns}
-              onRowClick={handleOpenModal}
-            />
-          </table>
+          <div className="overflow-x-auto">
+            <table className="table-auto">
+              <TableHead columns={shortsTableColumns} />
+              <TableBody
+                data={currentItems}
+                columns={shortsTableColumns}
+                onRowClick={handleOpenModal}
+              />
+            </table>
+          </div>
           <div className="flex justify-center my-4">
             <Button disabled={currentPage === 1} onClick={handlePrevPage}>
               Prev{" "}

@@ -85,14 +85,16 @@ const BooksTable = ({ books }) => {
         <ErrorMessage message="No such entry found!" />
       ) : (
         <>
-          <table className="table-auto">
-            <TableHead columns={booksTableColumns} />
-            <TableBody
-              data={currentItems}
-              columns={booksTableColumns}
-              onRowClick={handleOpenModal}
-            />
-          </table>
+          <div className="overflow-x-auto">
+            <table className="table-auto">
+              <TableHead columns={booksTableColumns} />
+              <TableBody
+                data={currentItems}
+                columns={booksTableColumns}
+                onRowClick={handleOpenModal}
+              />
+            </table>
+          </div>
           <div className="flex justify-center my-4">
             <Button
               disabled={currentPage === 1}

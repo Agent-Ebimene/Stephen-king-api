@@ -87,14 +87,16 @@ const VillainsTable = ({ villains }) => {
         <ErrorMessage message="No such entry found!" />
       ) : (
         <>
-          <table className="table-auto">
-            <TableHead columns={villainsTableColumns} />
-            <TableBody
-              data={currentItems}
-              columns={villainsTableColumns}
-              onRowClick={handleOpenModal}
-            />
-          </table>
+          <div className="overflow-x-auto">
+            <table className="table-auto">
+              <TableHead columns={villainsTableColumns} />
+              <TableBody
+                data={currentItems}
+                columns={villainsTableColumns}
+                onRowClick={handleOpenModal}
+              />
+            </table>
+          </div>
           <div className="flex justify-center my-4">
             <Button disabled={currentPage === 1} onClick={handlePrevPage}>
               Prev{" "}

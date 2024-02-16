@@ -18,9 +18,21 @@ const Header = () => {
   const [loading, setLoading] = useState(true);
 
   const tabs = [
-    { label: "books", endpoint: "api/books", setData: setBooks },
-    { label: "shorts", endpoint: "api/shorts", setData: setShorts },
-    { label: "villains", endpoint: "api/villains", setData: setVillains },
+    {
+      label: "books",
+      endpoint: "https://stephen-king-api.onrender.com/api/books",
+      setData: setBooks,
+    },
+    {
+      label: "shorts",
+      endpoint: "https://stephen-king-api.onrender.com/api/shorts",
+      setData: setShorts,
+    },
+    {
+      label: "villains",
+      endpoint: "https://stephen-king-api.onrender.com/api/villains",
+      setData: setVillains,
+    },
   ];
 
   const handleTabClick = (tab) => {

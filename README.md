@@ -6,9 +6,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm install`
+
+installs the only package used in the project,react-spinners.
+
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the project and starts it in development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
